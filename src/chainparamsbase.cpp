@@ -6,6 +6,7 @@
 #include <chainparamsbase.h>
 
 #include <common/args.h>
+#include <netconfig.h>
 #include <tinyformat.h>
 #include <util/chaintype.h>
 

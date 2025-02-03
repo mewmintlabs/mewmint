@@ -11,6 +11,7 @@
 #include <consensus/params.h>
 #include <deploymentinfo.h>
 #include <logging.h>
+#include <netconfig.h>
 #include <tinyformat.h>
 #include <util/chaintype.h>
 #include <util/strencodings.h>

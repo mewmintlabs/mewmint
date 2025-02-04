@@ -1,0 +1,31 @@
+name: Build
+
+on:
+  # Disabled by default
+  workflow_dispatch:
+    inputs:
+      platform:
+        description: 'Build platform'
+        required: true
+        default: 'ubuntu-latest'
+        type: choice
+        options:
+        - ubuntu-latest
+        - macos-latest
+        - windows-latest
+
+jobs:
+  build:
+    name: Build on ${{ github.event.inputs.platform }}
+    runs-on: ${{ github.event.inputs.platform }}
+    if: false  # This line disables the workflow completely
+
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+        
+    - name: Build
+      run: |
+        echo "Build process disabled"
+        exit 0

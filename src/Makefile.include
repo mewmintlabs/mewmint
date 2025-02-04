@@ -1,0 +1,38 @@
+# Common definitions for Mewmint Makefiles
+
+AM_CPPFLAGS = -I$(top_srcdir)/src
+
+# Convenience variables for common libraries
+LIBBITCOIN_COMMON = $(top_builddir)/src/libbitcoin_common.a
+LIBBITCOIN_CONSENSUS = $(top_builddir)/src/libbitcoin_consensus.a
+LIBBITCOIN_CLI = $(top_builddir)/src/libbitcoin_cli.a
+LIBBITCOIN_UTIL = $(top_builddir)/src/libbitcoin_util.a
+LIBBITCOIN_CRYPTO = $(top_builddir)/src/crypto/libbitcoin_crypto.a
+LIBBITCOINQT = $(top_builddir)/src/qt/libbitcoinqt.a
+LIBSECP256K1 = $(top_builddir)/src/secp256k1/libsecp256k1.la
+
+# MINIUPNPC_CPPFLAGS is defined in configure.ac
+
+# Common warnings
+WARN_CXXFLAGS = -Wall -Wextra -Wformat -Wvla -Wformat-security -Wcast-align
+
+AM_CXXFLAGS = $(WARN_CXXFLAGS) $(NOWARN_CXXFLAGS) $(ERROR_CXXFLAGS) $(CXXFLAGS_FOR_BUILD)
+AM_CPPFLAGS += -I$(builddir) -I$(srcdir) -I$(srcdir)/secp256k1/include
+
+# Target-specific flags
+if TARGET_WINDOWS
+WINDOWS_CPPFLAGS = -DWIN32 -D_WIN32_WINNT=0x0601 -D_WIN32_IE=0x0501 -DWIN32_LEAN_AND_MEAN
+AM_CPPFLAGS += $(WINDOWS_CPPFLAGS)
+endif
+
+if TARGET_DARWIN
+DARWIN_CPPFLAGS = -DMAC_OSX
+AM_CPPFLAGS += $(DARWIN_CPPFLAGS)
+endif
+
+# Enable debug flags where applicable
+if ENABLE_DEBUG
+AM_CXXFLAGS += -g3 -O0 -DDEBUG
+else
+AM_CXXFLAGS += -O2
+endif

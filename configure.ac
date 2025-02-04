@@ -274,6 +274,15 @@ AC_ARG_ENABLE([debug],
                     [use compiler flags and macros suited for debugging (default is no)])],
     [enable_debug=$enableval],
     [enable_debug=no])
+AM_CONDITIONAL([ENABLE_DEBUG], [test "$enable_debug" = "yes"])
+
+dnl Enable bitcoin tests
+AC_ARG_ENABLE([tests],
+    [AS_HELP_STRING([--enable-tests],
+                  [build test_bitcoin (default is yes)])],
+    [build_bitcoin_tests=$enableval],
+    [build_bitcoin_tests=yes])
+AM_CONDITIONAL([BUILD_BITCOIN_TESTS], [test "$build_bitcoin_tests" = "yes"])
 
 dnl Enable different -fsanitize options
 AC_ARG_WITH([sanitizers],
@@ -1679,9 +1688,9 @@ AC_CONFIG_LINKS([test/functional/test_runner.py:test/functional/test_runner.py])
 AC_CONFIG_LINKS([test/fuzz/test_runner.py:test/fuzz/test_runner.py])
 AC_CONFIG_LINKS([test/util/test_runner.py:test/util/test_runner.py])
 AC_CONFIG_LINKS([test/util/rpcauth-test.py:test/util/rpcauth-test.py])
-AC_CONFIG_LINKS([src/qt/Makefile:src/qt/Makefile])
-AC_CONFIG_LINKS([src/qt/test/Makefile:src/qt/test/Makefile])
-AC_CONFIG_LINKS([src/test/Makefile:src/test/Makefile])
+AC_CONFIG_FILES([src/qt/Makefile])
+AC_CONFIG_FILES([src/qt/test/Makefile])
+AC_CONFIG_FILES([src/test/Makefile])
 
 dnl boost's m4 checks do something really nasty: they export these vars. As a
 dnl result, they leak into secp256k1's configure and crazy things happen.

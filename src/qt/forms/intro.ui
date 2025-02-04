@@ -20,7 +20,7 @@
       <string notr="true">QLabel { font-style:italic; }</string>
      </property>
      <property name="text">
-      <string>Welcome to %1.</string>
+      <string>Welcome to MewMint Core.</string>
      </property>
      <property name="wordWrap">
       <bool>true</bool>
@@ -46,7 +46,7 @@
    <item>
     <widget class="QLabel" name="storageLabel">
      <property name="text">
-      <string>As this is the first time the program is launched, you can choose where %1 will store its data.</string>
+      <string>As this is the first time the program is launched, you can choose where MewMint Core will store its data.</string>
      </property>
      <property name="wordWrap">
       <bool>true</bool>

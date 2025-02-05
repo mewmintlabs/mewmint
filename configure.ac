@@ -572,38 +572,38 @@ CORE_CPPFLAGS="$CORE_CPPFLAGS -DHAVE_BUILD_INFO"
 AC_ARG_WITH([utils],
   [AS_HELP_STRING([--with-utils],
   [build bitcoin-cli bitcoin-tx bitcoin-util bitcoin-wallet (default=yes)])],
-  [build_bitcoin_utils=$withval],
-  [build_bitcoin_utils=yes])
+  [build_mewmint_utils=$withval],
+  [build_mewmint_utils=yes])
 
 AC_ARG_ENABLE([util-cli],
   [AS_HELP_STRING([--enable-util-cli],
   [build bitcoin-cli])],
-  [build_bitcoin_cli=$enableval],
-  [build_bitcoin_cli=$build_bitcoin_utils])
+  [build_mewmint_cli=$enableval],
+  [build_mewmint_cli=$build_mewmint_utils])
 
 AC_ARG_ENABLE([util-tx],
   [AS_HELP_STRING([--enable-util-tx],
   [build bitcoin-tx])],
-  [build_bitcoin_tx=$enableval],
-  [build_bitcoin_tx=$build_bitcoin_utils])
+  [build_mewmint_tx=$enableval],
+  [build_mewmint_tx=$build_mewmint_utils])
 
 AC_ARG_ENABLE([util-wallet],
   [AS_HELP_STRING([--enable-util-wallet],
   [build bitcoin-wallet])],
-  [build_bitcoin_wallet=$enableval],
-  [build_bitcoin_wallet=$build_bitcoin_utils])
+  [build_mewmint_wallet=$enableval],
+  [build_mewmint_wallet=$build_mewmint_utils])
 
 AC_ARG_ENABLE([util-util],
   [AS_HELP_STRING([--enable-util-util],
   [build bitcoin-util])],
-  [build_bitcoin_util=$enableval],
-  [build_bitcoin_util=$build_bitcoin_utils])
+  [build_mewmint_util=$enableval],
+  [build_mewmint_util=$build_mewmint_utils])
 
 AC_ARG_ENABLE([experimental-util-chainstate],
   [AS_HELP_STRING([--enable-experimental-util-chainstate],
   [build experimental bitcoin-chainstate executable (default=no)])],
-  [build_bitcoin_chainstate=$enableval],
-  [build_bitcoin_chainstate=no])
+  [build_mewmint_chainstate=$enableval],
+  [build_mewmint_chainstate=no])
 
 AC_ARG_WITH([experimental-kernel-lib],
   [AS_HELP_STRING([--with-experimental-kernel-lib],
@@ -614,8 +614,8 @@ AC_ARG_WITH([experimental-kernel-lib],
 AC_ARG_WITH([daemon],
   [AS_HELP_STRING([--with-daemon],
   [build bitcoind daemon (default=yes)])],
-  [build_bitcoind=$withval],
-  [build_bitcoind=yes])
+  [build_mewmintd=$withval],
+  [build_mewmintd=yes])
 
 case $host in
   *mingw*)
@@ -1090,16 +1090,16 @@ AC_DEFUN([SUPPRESS_WARNINGS],
 dnl enable-fuzz should disable all other targets
 if test "$enable_fuzz" = "yes"; then
   AC_MSG_WARN([enable-fuzz will disable all other targets and force --enable-fuzz-binary=yes])
-  build_bitcoin_utils=no
-  build_bitcoin_cli=no
-  build_bitcoin_tx=no
-  build_bitcoin_util=no
-  build_bitcoin_chainstate=no
-  build_bitcoin_wallet=no
-  build_bitcoind=no
-  bitcoin_enable_qt=no
-  bitcoin_enable_qt_test=no
-  bitcoin_enable_qt_dbus=no
+  build_mewmint_utils=no
+  build_mewmint_cli=no
+  build_mewmint_tx=no
+  build_mewmint_util=no
+  build_mewmint_chainstate=no
+  build_mewmint_wallet=no
+  build_mewmintd=no
+  mewmint_enable_qt=no
+  mewmint_enable_qt_test=no
+  mewmint_enable_qt_dbus=no
   use_bench=no
   use_tests=no
   use_external_signer=no
@@ -1112,7 +1112,7 @@ if test "$enable_fuzz" = "yes"; then
 else
   BITCOIN_QT_INIT
 
-  dnl sets $bitcoin_enable_qt, $bitcoin_enable_qt_test, $bitcoin_enable_qt_dbus
+  dnl sets $mewmint_enable_qt, $mewmint_enable_qt_test, $mewmint_enable_qt_dbus
   BITCOIN_QT_CONFIGURE([5.11.3])
 
   dnl Keep a copy of the original $QT_INCLUDES and use it when invoking qt's moc
@@ -1194,7 +1194,7 @@ if test "$use_usdt" != "no"; then
 fi
 AM_CONDITIONAL([ENABLE_USDT_TRACEPOINTS], [test "$use_usdt" = "yes"])
 
-if test "$build_bitcoind$bitcoin_enable_qt$use_bench$use_tests" = "nononono"; then
+if test "$build_mewmintd$mewmint_enable_qt$use_bench$use_tests" = "nononono"; then
   use_upnp=no
   use_natpmp=no
   use_zmq=no
@@ -1244,7 +1244,7 @@ if test "$use_natpmp" != "no"; then
   CPPFLAGS="$TEMP_CPPFLAGS"
 fi
 
-if test "$build_bitcoin_wallet$build_bitcoin_cli$build_bitcoin_tx$build_bitcoin_util$build_bitcoind$bitcoin_enable_qt$use_tests$use_bench$enable_fuzz_binary" = "nonononononononono"; then
+if test "$build_mewmint_wallet$build_mewmint_cli$build_mewmint_tx$build_mewmint_util$build_mewmintd$mewmint_enable_qt$use_tests$use_bench$enable_fuzz_binary" = "nonononononononono"; then
   use_boost=no
 else
   use_boost=yes
@@ -1302,7 +1302,7 @@ fi
 dnl libevent check
 
 use_libevent=no
-if test "$build_bitcoin_cli$build_bitcoind$bitcoin_enable_qt$enable_fuzz_binary$use_tests$use_bench" != "nononononono"; then
+if test "$build_mewmint_cli$build_mewmintd$mewmint_enable_qt$enable_fuzz_binary$use_tests$use_bench" != "nononononono"; then
   PKG_CHECK_MODULES([EVENT], [libevent >= 2.1.8], [use_libevent=yes], [AC_MSG_ERROR([libevent version 2.1.8 or greater not found.])])
   if test "$TARGET_OS" != "windows"; then
     PKG_CHECK_MODULES([EVENT_PTHREADS], [libevent_pthreads >= 2.1.8], [], [AC_MSG_ERROR([libevent_pthreads version 2.1.8 or greater not found.])])
@@ -1388,8 +1388,8 @@ else
 fi
 
 AM_CONDITIONAL([BUILD_MULTIPROCESS], [test "$build_multiprocess" = "yes"])
-AM_CONDITIONAL([BUILD_BITCOIN_NODE], [test "$build_multiprocess" = "yes"])
-AM_CONDITIONAL([BUILD_BITCOIN_GUI], [test "$build_multiprocess" = "yes"])
+AM_CONDITIONAL([BUILD_MEWMINT_NODE], [test "$build_multiprocess" = "yes"])
+AM_CONDITIONAL([BUILD_MEWMINT_GUI], [test "$build_multiprocess" = "yes"])
 
 dnl codegen tools check
 
@@ -1403,35 +1403,35 @@ if test "$build_multiprocess" != "no"; then
 fi
 
 AC_MSG_CHECKING([whether to build bitcoind])
-AM_CONDITIONAL([BUILD_BITCOIND], [test $build_bitcoind = "yes"])
-AC_MSG_RESULT($build_bitcoind)
+AM_CONDITIONAL([BUILD_MEWMINTD], [test $build_mewmintd = "yes"])
+AC_MSG_RESULT($build_mewmintd)
 
 AC_MSG_CHECKING([whether to build bitcoin-cli])
-AM_CONDITIONAL([BUILD_BITCOIN_CLI], [test $build_bitcoin_cli = "yes"])
-AC_MSG_RESULT($build_bitcoin_cli)
+AM_CONDITIONAL([BUILD_MEWMINT_CLI], [test $build_mewmint_cli = "yes"])
+AC_MSG_RESULT($build_mewmint_cli)
 
 AC_MSG_CHECKING([whether to build bitcoin-tx])
-AM_CONDITIONAL([BUILD_BITCOIN_TX], [test $build_bitcoin_tx = "yes"])
-AC_MSG_RESULT($build_bitcoin_tx)
+AM_CONDITIONAL([BUILD_MEWMINT_TX], [test $build_mewmint_tx = "yes"])
+AC_MSG_RESULT($build_mewmint_tx)
 
 AC_MSG_CHECKING([whether to build bitcoin-wallet])
-AM_CONDITIONAL([BUILD_BITCOIN_WALLET], [test $build_bitcoin_wallet = "yes"])
-AC_MSG_RESULT($build_bitcoin_wallet)
+AM_CONDITIONAL([BUILD_MEWMINT_WALLET], [test $build_mewmint_wallet = "yes"])
+AC_MSG_RESULT($build_mewmint_wallet)
 
 AC_MSG_CHECKING([whether to build bitcoin-util])
-AM_CONDITIONAL([BUILD_BITCOIN_UTIL], [test $build_bitcoin_util = "yes"])
-AC_MSG_RESULT($build_bitcoin_util)
+AM_CONDITIONAL([BUILD_MEWMINT_UTIL], [test $build_mewmint_util = "yes"])
+AC_MSG_RESULT($build_mewmint_util)
 
 AC_MSG_CHECKING([whether to build experimental bitcoin-chainstate])
-if test "$build_bitcoin_chainstate" = "yes"; then
+if test "$build_mewmint_chainstate" = "yes"; then
   if test "$build_experimental_kernel_lib" = "no"; then
     AC_MSG_ERROR([experimental bitcoin-chainstate cannot be built without the experimental bitcoinkernel library. Use --with-experimental-kernel-lib]);
   fi
 fi
-AM_CONDITIONAL([BUILD_BITCOIN_CHAINSTATE], [test $build_bitcoin_chainstate = "yes"])
-AC_MSG_RESULT($build_bitcoin_chainstate)
+AM_CONDITIONAL([BUILD_MEWMINT_CHAINSTATE], [test $build_mewmint_chainstate = "yes"])
+AC_MSG_RESULT($build_mewmint_chainstate)
 
-AM_CONDITIONAL([BUILD_BITCOIN_KERNEL_LIB], [test "$build_experimental_kernel_lib" != "no" && ( test "$build_experimental_kernel_lib" = "yes" || test "$build_bitcoin_chainstate" = "yes" )])
+AM_CONDITIONAL([BUILD_MEWMINT_KERNEL_LIB], [test "$build_experimental_kernel_lib" != "no" && ( test "$build_experimental_kernel_lib" = "yes" || test "$build_mewmint_chainstate" = "yes" )])
 
 AC_LANG_POP
 
@@ -1510,13 +1510,13 @@ fi
 
 dnl these are only used when qt is enabled
 BUILD_TEST_QT=""
-if test "$bitcoin_enable_qt" != "no"; then
+if test "$mewmint_enable_qt" != "no"; then
   dnl enable dbus support
   AC_MSG_CHECKING([whether to build GUI with support for D-Bus])
-  if test "$bitcoin_enable_qt_dbus" != "no"; then
+  if test "$mewmint_enable_qt_dbus" != "no"; then
     AC_DEFINE([USE_DBUS], [1], [Define if dbus support should be compiled in])
   fi
-  AC_MSG_RESULT([$bitcoin_enable_qt_dbus])
+  AC_MSG_RESULT([$mewmint_enable_qt_dbus])
 
   dnl enable qr support
   AC_MSG_CHECKING([whether to build GUI with support for QR codes])
@@ -1538,7 +1538,7 @@ if test "$bitcoin_enable_qt" != "no"; then
   fi
 
   AC_MSG_CHECKING([whether to build test_bitcoin-qt])
-  if test "$use_gui_tests$bitcoin_enable_qt_test" = "yesyes"; then
+  if test "$use_gui_tests$mewmint_enable_qt_test" = "yesyes"; then
     AC_MSG_RESULT([yes])
     BUILD_TEST_QT="yes"
   else
@@ -1566,7 +1566,7 @@ else
   AC_MSG_RESULT([no])
 fi
 
-if test "$build_bitcoin_wallet$build_bitcoin_cli$build_bitcoin_tx$build_bitcoin_util$build_bitcoind$bitcoin_enable_qt$enable_fuzz_binary$use_bench$use_tests" = "nonononononononono"; then
+if test "$build_mewmint_wallet$build_mewmint_cli$build_mewmint_tx$build_mewmint_util$build_mewmintd$mewmint_enable_qt$enable_fuzz_binary$use_bench$use_tests" = "nonononononononono"; then
   AC_MSG_ERROR([No targets! Please specify at least one of: --with-utils --with-daemon --with-gui --enable-fuzz(-binary) --enable-bench or --enable-tests])
 fi
 
@@ -1580,7 +1580,7 @@ AM_CONDITIONAL([USE_BDB], [test "$use_bdb" = "yes"])
 AM_CONDITIONAL([ENABLE_TESTS], [test "$BUILD_TEST" = "yes"])
 AM_CONDITIONAL([ENABLE_FUZZ], [test "$enable_fuzz" = "yes"])
 AM_CONDITIONAL([ENABLE_FUZZ_BINARY], [test "$enable_fuzz_binary" = "yes"])
-AM_CONDITIONAL([ENABLE_QT], [test "$bitcoin_enable_qt" = "yes"])
+AM_CONDITIONAL([ENABLE_QT], [test "$mewmint_enable_qt" = "yes"])
 AM_CONDITIONAL([ENABLE_QT_TESTS], [test "$BUILD_TEST_QT" = "yes"])
 AM_CONDITIONAL([ENABLE_BENCH], [test "$use_bench" = "yes"])
 AM_CONDITIONAL([USE_QRCODE], [test "$use_qr" = "yes"])
@@ -1726,8 +1726,8 @@ if test "$enable_wallet" != "no"; then
     echo "    with sqlite   = $use_sqlite"
     echo "    with bdb      = $use_bdb"
 fi
-echo "  with gui / qt   = $bitcoin_enable_qt"
-if test $bitcoin_enable_qt != "no"; then
+echo "  with gui / qt   = $mewmint_enable_qt"
+if test $mewmint_enable_qt != "no"; then
     echo "    with qr       = $use_qr"
 fi
 echo "  with zmq        = $use_zmq"

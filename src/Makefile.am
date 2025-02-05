@@ -39,7 +39,7 @@ LIBSECP256K1=secp256k1/libsecp256k1.la
 if ENABLE_ZMQ
 LIBBITCOIN_ZMQ=libbitcoin_zmq.a
 endif
-if BUILD_BITCOIN_KERNEL_LIB
+if BUILD_MEWMINT_KERNEL_LIB
 LIBBITCOINKERNEL=libbitcoinkernel.la
 endif
 if ENABLE_WALLET
@@ -82,34 +82,34 @@ EXTRA_LIBRARIES += \
   $(LIBBITCOIN_WALLET_TOOL) \
   $(LIBBITCOIN_ZMQ)
 
-if BUILD_BITCOIND
-  bin_PROGRAMS += bitcoind
+if BUILD_MEWMINTD
+  bin_PROGRAMS += mewmintd
 endif
 
-if BUILD_BITCOIN_NODE
-  bin_PROGRAMS += bitcoin-node
+if BUILD_MEWMINT_NODE
+  bin_PROGRAMS += mewmint-node
 endif
 
-if BUILD_BITCOIN_CLI
-  bin_PROGRAMS += bitcoin-cli
+if BUILD_MEWMINT_CLI
+  bin_PROGRAMS += mewmint-cli
 endif
 
-if BUILD_BITCOIN_TX
-  bin_PROGRAMS += bitcoin-tx
+if BUILD_MEWMINT_TX
+  bin_PROGRAMS += mewmint-tx
 endif
 
 if ENABLE_WALLET
-if BUILD_BITCOIN_WALLET
-  bin_PROGRAMS += bitcoin-wallet
+if BUILD_MEWMINT_WALLET
+  bin_PROGRAMS += mewmint-wallet
 endif
 endif
 
-if BUILD_BITCOIN_UTIL
-  bin_PROGRAMS += bitcoin-util
+if BUILD_MEWMINT_UTIL
+  bin_PROGRAMS += mewmint-util
 endif
 
-if BUILD_BITCOIN_CHAINSTATE
-  bin_PROGRAMS += bitcoin-chainstate
+if BUILD_MEWMINT_CHAINSTATE
+  bin_PROGRAMS += mewmint-chainstate
 endif
 
 .PHONY: FORCE check-symbols check-security
@@ -775,16 +775,16 @@ nodist_libbitcoin_util_a_SOURCES = $(srcdir)/obj/build.h
 #
 
 # bitcoind & bitcoin-node binaries #
-bitcoin_daemon_sources = bitcoind.cpp
-bitcoin_bin_cppflags = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
-bitcoin_bin_cxxflags = $(AM_CXXFLAGS) $(PIE_FLAGS)
-bitcoin_bin_ldflags = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS) $(PTHREAD_FLAGS)
+mewmint_daemon_sources = mewmintd.cpp
+mewmint_bin_cppflags = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
+mewmint_bin_cxxflags = $(AM_CXXFLAGS) $(PIE_FLAGS)
+mewmint_bin_ldflags = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS) $(PTHREAD_FLAGS)
 
 if TARGET_WINDOWS
-bitcoin_daemon_sources += bitcoind-res.rc
+mewmint_daemon_sources += mewmintd-res.rc
 endif
 
-bitcoin_bin_ldadd = \
+mewmint_bin_ldadd = \
   $(LIBBITCOIN_WALLET) \
   $(LIBBITCOIN_COMMON) \
   $(LIBBITCOIN_UTIL) \
@@ -796,51 +796,51 @@ bitcoin_bin_ldadd = \
   $(LIBMEMENV) \
   $(LIBSECP256K1)
 
-bitcoin_bin_ldadd += $(BDB_LIBS) $(MINIUPNPC_LIBS) $(NATPMP_LIBS) $(EVENT_PTHREADS_LIBS) $(EVENT_LIBS) $(ZMQ_LIBS) $(SQLITE_LIBS)
+mewmint_bin_ldadd += $(BDB_LIBS) $(MINIUPNPC_LIBS) $(NATPMP_LIBS) $(EVENT_PTHREADS_LIBS) $(EVENT_LIBS) $(ZMQ_LIBS) $(SQLITE_LIBS)
 
-bitcoind_SOURCES = $(bitcoin_daemon_sources) init/bitcoind.cpp
-bitcoind_CPPFLAGS = $(bitcoin_bin_cppflags)
-bitcoind_CXXFLAGS = $(bitcoin_bin_cxxflags)
-bitcoind_LDFLAGS = $(bitcoin_bin_ldflags)
-bitcoind_LDADD = $(LIBBITCOIN_NODE) $(bitcoin_bin_ldadd)
+mewmintd_SOURCES = $(mewmint_daemon_sources) init/mewmintd.cpp
+mewmintd_CPPFLAGS = $(mewmint_bin_cppflags)
+mewmintd_CXXFLAGS = $(mewmint_bin_cxxflags)
+mewmintd_LDFLAGS = $(mewmint_bin_ldflags)
+mewmintd_LDADD = $(LIBBITCOIN_NODE) $(mewmint_bin_ldadd)
 
-bitcoin_node_SOURCES = $(bitcoin_daemon_sources) init/bitcoin-node.cpp
-bitcoin_node_CPPFLAGS = $(bitcoin_bin_cppflags)
-bitcoin_node_CXXFLAGS = $(bitcoin_bin_cxxflags)
-bitcoin_node_LDFLAGS = $(bitcoin_bin_ldflags)
-bitcoin_node_LDADD = $(LIBBITCOIN_NODE) $(bitcoin_bin_ldadd) $(LIBBITCOIN_IPC) $(LIBMULTIPROCESS_LIBS)
+mewmint_node_SOURCES = $(mewmint_daemon_sources) init/mewmint-node.cpp
+mewmint_node_CPPFLAGS = $(mewmint_bin_cppflags)
+mewmint_node_CXXFLAGS = $(mewmint_bin_cxxflags)
+mewmint_node_LDFLAGS = $(mewmint_bin_ldflags)
+mewmint_node_LDADD = $(LIBBITCOIN_NODE) $(mewmint_bin_ldadd) $(LIBBITCOIN_IPC) $(LIBMULTIPROCESS_LIBS)
 
 # bitcoin-cli binary #
-bitcoin_cli_SOURCES = bitcoin-cli.cpp
-bitcoin_cli_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES) $(EVENT_CFLAGS)
-bitcoin_cli_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
-bitcoin_cli_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS) $(PTHREAD_FLAGS)
+mewmint_cli_SOURCES = mewmint-cli.cpp
+mewmint_cli_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES) $(EVENT_CFLAGS)
+mewmint_cli_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+mewmint_cli_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS) $(PTHREAD_FLAGS)
 
 if TARGET_WINDOWS
-bitcoin_cli_SOURCES += bitcoin-cli-res.rc
+mewmint_cli_SOURCES += mewmint-cli-res.rc
 endif
 
-bitcoin_cli_LDADD = \
+mewmint_cli_LDADD = \
   $(LIBBITCOIN_CLI) \
   $(LIBUNIVALUE) \
   $(LIBBITCOIN_COMMON) \
   $(LIBBITCOIN_UTIL) \
   $(LIBBITCOIN_CRYPTO)
 
-bitcoin_cli_LDADD += $(EVENT_LIBS)
+mewmint_cli_LDADD += $(EVENT_LIBS)
 #
 
 # bitcoin-tx binary #
-bitcoin_tx_SOURCES = bitcoin-tx.cpp
-bitcoin_tx_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
-bitcoin_tx_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
-bitcoin_tx_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS) $(PTHREAD_FLAGS)
+mewmint_tx_SOURCES = mewmint-tx.cpp
+mewmint_tx_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
+mewmint_tx_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+mewmint_tx_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS) $(PTHREAD_FLAGS)
 
 if TARGET_WINDOWS
-bitcoin_tx_SOURCES += bitcoin-tx-res.rc
+mewmint_tx_SOURCES += mewmint-tx-res.rc
 endif
 
-bitcoin_tx_LDADD = \
+mewmint_tx_LDADD = \
   $(LIBUNIVALUE) \
   $(LIBBITCOIN_COMMON) \
   $(LIBBITCOIN_UTIL) \
@@ -850,12 +850,12 @@ bitcoin_tx_LDADD = \
 #
 
 # bitcoin-wallet binary #
-bitcoin_wallet_SOURCES = bitcoin-wallet.cpp
-bitcoin_wallet_SOURCES += init/bitcoin-wallet.cpp
-bitcoin_wallet_CPPFLAGS = $(bitcoin_bin_cppflags)
-bitcoin_wallet_CXXFLAGS = $(bitcoin_bin_cxxflags)
-bitcoin_wallet_LDFLAGS = $(bitcoin_bin_ldflags)
-bitcoin_wallet_LDADD = \
+mewmint_wallet_SOURCES = mewmint-wallet.cpp
+mewmint_wallet_SOURCES += init/mewmint-wallet.cpp
+mewmint_wallet_CPPFLAGS = $(bitcoin_bin_cppflags)
+mewmint_wallet_CXXFLAGS = $(bitcoin_bin_cxxflags)
+mewmint_wallet_LDFLAGS = $(bitcoin_bin_ldflags)
+mewmint_wallet_LDADD = \
   $(LIBBITCOIN_WALLET_TOOL) \
   $(LIBBITCOIN_WALLET) \
   $(LIBBITCOIN_COMMON) \
@@ -868,21 +868,21 @@ bitcoin_wallet_LDADD = \
   $(SQLITE_LIBS)
 
 if TARGET_WINDOWS
-bitcoin_wallet_SOURCES += bitcoin-wallet-res.rc
+mewmint_wallet_SOURCES += mewmint-wallet-res.rc
 endif
 #
 
 # bitcoin-util binary #
-bitcoin_util_SOURCES = bitcoin-util.cpp
-bitcoin_util_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
-bitcoin_util_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
-bitcoin_util_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS) $(PTHREAD_FLAGS)
+mewmint_util_SOURCES = mewmint-util.cpp
+mewmint_util_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
+mewmint_util_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+mewmint_util_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS) $(PTHREAD_FLAGS)
 
 if TARGET_WINDOWS
-bitcoin_util_SOURCES += bitcoin-util-res.rc
+mewmint_util_SOURCES += mewmint-util-res.rc
 endif
 
-bitcoin_util_LDADD = \
+mewmint_util_LDADD = \
   $(LIBBITCOIN_COMMON) \
   $(LIBBITCOIN_UTIL) \
   $(LIBUNIVALUE) \
@@ -892,20 +892,20 @@ bitcoin_util_LDADD = \
 #
 
 # bitcoin-chainstate binary #
-bitcoin_chainstate_SOURCES = bitcoin-chainstate.cpp
-bitcoin_chainstate_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES) $(BOOST_CPPFLAGS)
-bitcoin_chainstate_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+mewmint_chainstate_SOURCES = mewmint-chainstate.cpp
+mewmint_chainstate_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES) $(BOOST_CPPFLAGS)
+mewmint_chainstate_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 
-bitcoin_chainstate_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(PTHREAD_FLAGS) $(LIBTOOL_APP_LDFLAGS) -static
-bitcoin_chainstate_LDADD = $(LIBBITCOINKERNEL)
+mewmint_chainstate_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(PTHREAD_FLAGS) $(LIBTOOL_APP_LDFLAGS) -static
+mewmint_chainstate_LDADD = $(LIBBITCOINKERNEL)
 
 # libtool is unable to calculate this indirect dependency, presumably because it's a subproject.
 # libsecp256k1 only needs to be linked in when libbitcoinkernel is static.
-bitcoin_chainstate_LDADD += $(LIBSECP256K1)
+mewmint_chainstate_LDADD += $(LIBSECP256K1)
 #
 
 # bitcoinkernel library #
-if BUILD_BITCOIN_KERNEL_LIB
+if BUILD_MEWMINT_KERNEL_LIB
 lib_LTLIBRARIES += $(LIBBITCOINKERNEL)
 
 libbitcoinkernel_la_LDFLAGS = $(AM_LDFLAGS) -no-undefined $(RELDFLAGS) $(PTHREAD_FLAGS)
